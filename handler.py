@@ -69,9 +69,16 @@ def find_view_spot(body: dict) -> list:
 
 
 def handle_find_view_spot(event, context):
+    view_spots = find_view_spot(event)
+    # Sort view spots by value in descending order.
+    view_spots = sorted(view_spots, key=itemgetter('value'), reverse=True)
+    # If parameter N is part of request, return only first N view spots.
+    if 'N' in event:
+        # Ensure all view spots are returned if there are less than N view spots.
+        view_spots = view_spots[:min(event['N'], len(view_spots))]
     response = {
         "statusCode": 200,
-        "body": json.dumps(find_view_spot(event))
+        "body": json.dumps(view_spots)
     }
 
     return response
