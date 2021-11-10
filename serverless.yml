@@ -7,5 +7,5 @@ provider:
   lambdaHashingVersion: 20201221
 
 functions:
-  hello:
+  findViewSpots:
     handler: handler.handle_find_view_spot
