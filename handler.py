@@ -1,5 +1,9 @@
 import json
+import logging
 from operator import itemgetter
+import sys
+
+logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 
 def combine_mesh(mesh: dict) -> list:
@@ -15,6 +19,8 @@ def combine_mesh(mesh: dict) -> list:
     transformed_mesh = []
     for (element, value) in zip(elements, values):
         if element['id'] != value['element_id']:
+            logging.error(
+                f"Found mismatching ids in \"values\" and \"elements\": ${element['id']} vs ${values['element_id']}")
             raise ValueError(f"Missing value for element with id ${element['id']}")
         element['value'] = value['value']
         transformed_mesh.append(element)
@@ -74,6 +80,7 @@ def handle_find_view_spots(event, context):
     try:
         view_spots = find_view_spots(event)
     except (KeyError, ValueError) as e:
+        logging.error(f"BadReqest: ${e}")
         raise ValueError(f"[BadRequest] Input validation error")
 
     # Sort view spots by value in descending order.
