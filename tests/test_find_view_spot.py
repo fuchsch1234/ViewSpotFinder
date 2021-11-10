@@ -1,5 +1,3 @@
-import json
-import os.path
 import unittest
 
 from handler import find_view_spots
