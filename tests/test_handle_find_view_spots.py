@@ -43,3 +43,26 @@ class TestHandleFindViewSpots(unittest.TestCase):
         response = handle_find_view_spots(mesh, None)
         view_spots = json.loads(response['body'])
         self.assertListEqual([{'element_id': 3, 'value': 1.9}, {'element_id': 0, 'value': 1.0}], view_spots)
+
+    def test_raises_exception_if_value_is_missing_for_element(self):
+        mesh = {
+            'elements': [{'id': 0, 'nodes': [0, 1, 2]}, {'id': 1, 'nodes': [2, 3, 4]}, {'id': 2, 'nodes': [1, 2, 4]},
+                         {'id': 3, 'nodes': [4, 5, 6]}],
+            'values': [{'element_id': 0, 'value': 1.0},
+                       {'element_id': 2, 'value': 0.9}, {'element_id': 3, 'value': 1.9}]
+        }
+
+        with self.assertRaises(ValueError):
+            handle_find_view_spots(mesh, None)
+
+    def test_raises_exception_if_JSON_format_is_not_as_expected(self):
+        mesh = {
+            # Missing id field in second element
+            'elements': [{'id': 0, 'nodes': [0, 1, 2]}, {'nodes': [2, 3, 4]}, {'id': 2, 'nodes': [1, 2, 4]},
+                         {'id': 3, 'nodes': [4, 5, 6]}],
+            'values': [{'element_id': 0, 'value': 1.0},
+                       {'element_id': 2, 'value': 0.9}, {'element_id': 3, 'value': 1.9}]
+        }
+
+        with self.assertRaises(ValueError):
+            handle_find_view_spots(mesh, None)
