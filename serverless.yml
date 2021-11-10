@@ -8,4 +8,4 @@ provider:
 
 functions:
   findViewSpots:
-    handler: handler.handle_find_view_spot
+    handler: handler.handle_find_view_spots

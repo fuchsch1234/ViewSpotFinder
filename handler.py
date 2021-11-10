@@ -20,7 +20,7 @@ def combine_mesh(mesh: dict) -> list:
     return transformed_mesh
 
 
-def find_view_spot(body: dict) -> list:
+def find_view_spots(body: dict) -> list:
     """Finds view spots in a given mesh.
 
     A view spot is defined as an element that has no neighbors with a higher value than itself. Two elements are
@@ -68,8 +68,8 @@ def find_view_spot(body: dict) -> list:
     return view_spots
 
 
-def handle_find_view_spot(event, context):
-    view_spots = find_view_spot(event)
+def handle_find_view_spots(event, context):
+    view_spots = find_view_spots(event)
     # Sort view spots by value in descending order.
     view_spots = sorted(view_spots, key=itemgetter('value'), reverse=True)
     # If parameter N is part of request, return only first N view spots.

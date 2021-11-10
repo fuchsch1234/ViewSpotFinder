@@ -1,6 +1,8 @@
+import json
+import os.path
 import unittest
 
-from handler import find_view_spot
+from handler import find_view_spots
 
 
 class TestViewSpotFinder(unittest.TestCase):
@@ -11,7 +13,7 @@ class TestViewSpotFinder(unittest.TestCase):
             'values': [{'element_id': 0, 'value': 0.0}]
         }
 
-        view_spots = find_view_spot(mesh)
+        view_spots = find_view_spots(mesh)
         self.assertListEqual([{'element_id': 0, 'value': 0.0}], view_spots)
 
     def test_find_single_view_spot(self):
@@ -20,7 +22,7 @@ class TestViewSpotFinder(unittest.TestCase):
             'values': [{'element_id': 0, 'value': 1.0}, {'element_id': 1, 'value': 0.5}, {'element_id': 2, 'value': 0.9}]
         }
 
-        view_spots = find_view_spot(mesh)
+        view_spots = find_view_spots(mesh)
         self.assertListEqual([{'element_id': 0, 'value': 1.0}], view_spots)
 
     def test_find_multiple_view_spots(self):
@@ -31,7 +33,7 @@ class TestViewSpotFinder(unittest.TestCase):
                        {'element_id': 2, 'value': 0.9}, {'element_id': 3, 'value': 1.9}]
         }
 
-        view_spots = find_view_spot(mesh)
+        view_spots = find_view_spots(mesh)
         self.assertListEqual([{'element_id': 0, 'value': 1.0}, {'element_id': 3, 'value': 1.9}], view_spots)
 
     def test_multiple_view_spots_with_plateau(self):
@@ -40,5 +42,5 @@ class TestViewSpotFinder(unittest.TestCase):
             'values': [{'element_id': 0, 'value': 1.0}, {'element_id': 1, 'value': 0.5}, {'element_id': 2, 'value': 0.5}]
         }
 
-        view_spots = find_view_spot(mesh)
+        view_spots = find_view_spots(mesh)
         self.assertListEqual([{'element_id': 0, 'value': 1.0}, {'element_id': 2, 'value': 0.5}], view_spots)
