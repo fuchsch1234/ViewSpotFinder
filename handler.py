@@ -14,6 +14,8 @@ def combine_mesh(mesh: dict) -> list:
 
     transformed_mesh = []
     for (element, value) in zip(elements, values):
+        if element['id'] != value['element_id']:
+            raise ValueError(f"Missing value for element with id ${element['id']}")
         element['value'] = value['value']
         transformed_mesh.append(element)
 
@@ -69,7 +71,11 @@ def find_view_spots(body: dict) -> list:
 
 
 def handle_find_view_spots(event, context):
-    view_spots = find_view_spots(event)
+    try:
+        view_spots = find_view_spots(event)
+    except (KeyError, ValueError) as e:
+        raise ValueError(f"[BadRequest] Input validation error")
+
     # Sort view spots by value in descending order.
     view_spots = sorted(view_spots, key=itemgetter('value'), reverse=True)
     # If parameter N is part of request, return only first N view spots.
